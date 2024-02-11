@@ -2,6 +2,9 @@
     "name": "ui5-task-no-debug-files",
     "version": "0.0.1",
     "description": "Task for the UI5 tooling to omit debug & map files from the final build result.",
+    "scripts": {
+        "test": "tsx ./test/index.test.ts"
+    },
     "keywords": [
         "UI5",
         "Tooling",
@@ -10,6 +13,7 @@
     "author": "Dimitar Fenerski",
     "license": "Apache-2.0",
     "devDependencies": {
-        "@ui5/cli": "^3.8.0"
+        "@ui5/cli": "^3.8.0",
+        "tsx": "^4.7.1"
     }
 }
