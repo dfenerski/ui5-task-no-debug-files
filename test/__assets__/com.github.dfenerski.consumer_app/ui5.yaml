@@ -1,0 +1,17 @@
+specVersion: '3.0'
+metadata:
+  name: com.github.dfenerski.consumer_app
+type: application
+framework:
+  name: OpenUI5
+  version: '1.120.6'
+  libraries:
+    - name: sap.m
+    - name: sap.ui.core
+    - name: themelib_sap_horizon
+builder:
+  customTasks:
+    - name: ui5-tooling-transpile-task
+      afterTask: replaceVersion
+    - name: ui5-task-no-debug-files
+      afterTask: generateStandaloneAppBundle

@@ -1,0 +1,18 @@
+<mvc:View
+	controllerName="com.github.dfenerski.consumer_app.controller.Main"
+	displayBlock="true"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:lib="com.github.dfenerski.library"
+>
+
+	<Page
+		title="{i18n>appTitle}"
+		id="page">
+		<content>
+			<lib:Example text="Foo" />
+		</content>
+	</Page>
+
+</mvc:View>
