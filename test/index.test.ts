@@ -647,3 +647,37 @@ describe('lib', () => {
         assert.equal(readdirSync(libSrc).length, 22);
     });
 });
+
+describe('consumer app', () => {
+    it('should produce minimalistic app & lib bundles that work; given default options provided to app & lib', (ctx: SuiteContext) => {
+        // Ideally both should be copied to temp dirs but I dont have the time right now to make rsync work on this windows machine. Either way, we can allow asset dist folder contamination for the last test I guess
+        spawnSync(`ui5 build --clean-dest`, {
+            stdio: 'inherit',
+            shell: true,
+            cwd: resolve('./test/__assets__/com.github.dfenerski.library'),
+        });
+        spawnSync(`ui5 build self-contained --clean-dest --all`, {
+            stdio: 'inherit',
+            shell: true,
+            cwd: resolve('./test/__assets__/com.github.dfenerski.consumer_app'),
+        });
+        const appSrc = resolve(
+            './test/__assets__/com.github.dfenerski.consumer_app/dist',
+        );
+        console.error(appSrc);
+        const Paths = {
+            resources: resolve(appSrc, 'resources'),
+            testResources: resolve(appSrc, 'test-resources'),
+            indexCdn: resolve(appSrc, 'index-cdn.html'),
+            index: resolve(appSrc, 'index.html'),
+            manifest: resolve(appSrc, 'manifest.json'),
+        };
+        assert.equal(existsSync(Paths.resources), true);
+        assert.equal(existsSync(Paths.testResources), true);
+        assert.equal(existsSync(Paths.indexCdn), true);
+        assert.equal(existsSync(Paths.index), true);
+        assert.equal(existsSync(Paths.manifest), true);
+        assert.equal(readdirSync(appSrc).length, 5);
+        // Finally, a check should follow, whether this barebone app can run. I verified manually using live serve on the index, which loads from the custom bundle but this too should be automated
+    });
+});
