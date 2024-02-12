@@ -16,7 +16,11 @@ builder:
       configuration:
         generateTsInterfaces: true # always generate the TS interfaces in build
     - name: ui5-task-no-debug-files
-      afterTask: generateStandaloneAppBundle
+      afterTask: generateLibraryPreload
+      configuration:
+        omitDbgFiles: false
+        omitSourceMapFiles: false
+        omitNonBundledJSXMLFiles: false
 ---
 specVersion: '3.0'
 kind: extension

@@ -354,3 +354,296 @@ describe('app', () => {
         assert.equal(readdirSync(Paths.dist).length, 4);
     });
 });
+
+describe('lib', () => {
+    beforeEach((ctx: SuiteContext) => {
+        ctx.tmpDir = resolve(
+            `./test/__dist__/${randomBytes(5).toString('hex')}`,
+        );
+    });
+
+    afterEach((ctx: SuiteContext) => {
+        rmSync(ctx.tmpDir!, { recursive: true, force: true });
+    });
+
+    it('should result in only 4 files with default options', (ctx: SuiteContext) => {
+        const ui5 = {
+            yaml: resolve(
+                './test/__assets__/com.github.dfenerski.library/ui5.basic.yaml',
+            ),
+        };
+        spawnSync(
+            `ui5 build --config "${ui5.yaml}" --dest "${resolve(
+                `${ctx.tmpDir}/dist`,
+            )}"`,
+            {
+                stdio: 'inherit',
+                shell: true,
+                cwd: resolve('./test/__assets__/com.github.dfenerski.library'),
+            },
+        );
+        const libSrc = resolve(
+            ctx.tmpDir!,
+            'dist',
+            'resources',
+            'com',
+            'github',
+            'dfenerski',
+            'library',
+        );
+        const Paths = {
+            themes: resolve(libSrc, 'themes'),
+            dotLibrary: resolve(libSrc, '.library'),
+            libraryPreload: resolve(libSrc, 'library-preload.js'),
+            manifest: resolve(libSrc, 'manifest.json'),
+        };
+        assert.equal(existsSync(Paths.themes), true);
+        assert.equal(existsSync(Paths.dotLibrary), true);
+        assert.equal(existsSync(Paths.libraryPreload), true);
+        assert.equal(existsSync(Paths.manifest), true);
+        assert.equal(readdirSync(libSrc).length, 7);
+    });
+
+    it('should do nothing if settings are not enabled', (ctx: SuiteContext) => {
+        const ui5 = {
+            yaml: resolve(
+                './test/__assets__/com.github.dfenerski.library/ui5.noOmissions.yaml',
+            ),
+        };
+        spawnSync(
+            `ui5 build --config "${ui5.yaml}" --dest "${resolve(
+                `${ctx.tmpDir}/dist`,
+            )}"`,
+            {
+                stdio: 'inherit',
+                shell: true,
+                cwd: resolve('./test/__assets__/com.github.dfenerski.library'),
+            },
+        );
+        const libSrc = resolve(
+            ctx.tmpDir!,
+            'dist',
+            'resources',
+            'com',
+            'github',
+            'dfenerski',
+            'library',
+        );
+        const Paths = {
+            indexDTS: resolve(ctx.tmpDir!, 'dist', 'index.d.ts'),
+            themes: resolve(libSrc, 'themes'),
+            dotLibrary: resolve(libSrc, '.library'),
+            libraryPreload: resolve(libSrc, 'library-preload.js'),
+            manifest: resolve(libSrc, 'manifest.json'),
+        };
+        assert.equal(existsSync(Paths.indexDTS), true);
+        assert.equal(existsSync(Paths.themes), true);
+        assert.equal(existsSync(Paths.dotLibrary), true);
+        assert.equal(existsSync(Paths.libraryPreload), true);
+        assert.equal(existsSync(Paths.manifest), true);
+        assert.equal(readdirSync(libSrc).length, 30);
+    });
+
+    it('should output both dbg & normal assets when both flags are raised', (ctx: SuiteContext) => {
+        const ui5 = {
+            yaml: resolve(
+                './test/__assets__/com.github.dfenerski.library/ui5.withDbgFiles.yaml',
+            ),
+        };
+        spawnSync(
+            `ui5 build --config "${ui5.yaml}" --dest "${resolve(
+                `${ctx.tmpDir}/dist`,
+            )}"`,
+            {
+                stdio: 'inherit',
+                shell: true,
+                cwd: resolve('./test/__assets__/com.github.dfenerski.library'),
+            },
+        );
+        const libSrc = resolve(
+            ctx.tmpDir!,
+            'dist',
+            'resources',
+            'com',
+            'github',
+            'dfenerski',
+            'library',
+        );
+        const Paths = {
+            themes: resolve(libSrc, 'themes'),
+            dotLibrary: resolve(libSrc, '.library'),
+            ExampleDbg: resolve(libSrc, 'Example-dbg.js'),
+            Example: resolve(libSrc, 'Example.js'),
+            ExampleRendererDbg: resolve(libSrc, 'ExampleRenderer-dbg.js'),
+            ExampleRenderer: resolve(libSrc, 'ExampleRenderer.js'),
+            libraryDbg: resolve(libSrc, 'library-dbg.js'),
+            libraryPreload: resolve(libSrc, 'library-preload.js'),
+            library: resolve(libSrc, 'library.js'),
+            manifest: resolve(libSrc, 'manifest.json'),
+        };
+        assert.equal(existsSync(Paths.themes), true);
+        assert.equal(existsSync(Paths.dotLibrary), true);
+        assert.equal(existsSync(Paths.ExampleDbg), true);
+        assert.equal(existsSync(Paths.Example), true);
+        assert.equal(existsSync(Paths.ExampleRendererDbg), true);
+        assert.equal(existsSync(Paths.ExampleRenderer), true);
+        assert.equal(existsSync(Paths.libraryDbg), true);
+        assert.equal(existsSync(Paths.libraryPreload), true);
+        assert.equal(existsSync(Paths.library), true);
+        assert.equal(existsSync(Paths.manifest), true);
+        assert.equal(readdirSync(libSrc).length, 13);
+    });
+
+    it('should output dbg, sourceMap & normal assets when flags are raised', (ctx: SuiteContext) => {
+        const ui5 = {
+            yaml: resolve(
+                './test/__assets__/com.github.dfenerski.library/ui5.withSourceMapFiles.yaml',
+            ),
+        };
+        spawnSync(
+            `ui5 build --config "${ui5.yaml}" --dest "${resolve(
+                `${ctx.tmpDir}/dist`,
+            )}"`,
+            {
+                stdio: 'inherit',
+                shell: true,
+                cwd: resolve('./test/__assets__/com.github.dfenerski.library'),
+            },
+        );
+        const libSrc = resolve(
+            ctx.tmpDir!,
+            'dist',
+            'resources',
+            'com',
+            'github',
+            'dfenerski',
+            'library',
+        );
+        const Paths = {
+            themes: resolve(libSrc, 'themes'),
+            dotLibrary: resolve(libSrc, '.library'),
+            ExampleDbg: resolve(libSrc, 'Example-dbg.js'),
+            ExampleDbgMap: resolve(libSrc, 'Example-dbg.js.map'),
+            Example: resolve(libSrc, 'Example.js'),
+            ExampleMap: resolve(libSrc, 'Example.js.map'),
+            ExampleRendererDbg: resolve(libSrc, 'ExampleRenderer-dbg.js'),
+            ExampleRendererDbgMap: resolve(
+                libSrc,
+                'ExampleRenderer-dbg.js.map',
+            ),
+            ExampleRenderer: resolve(libSrc, 'ExampleRenderer.js'),
+            ExampleRendererMap: resolve(libSrc, 'ExampleRenderer.js.map'),
+            libraryDbg: resolve(libSrc, 'library-dbg.js'),
+            libraryDbgMap: resolve(libSrc, 'library-dbg.js.map'),
+            libraryPreload: resolve(libSrc, 'library-preload.js'),
+            libraryPreloadMap: resolve(libSrc, 'library-preload.js.map'),
+            library: resolve(libSrc, 'library.js'),
+            libraryMap: resolve(libSrc, 'library.js.map'),
+            manifest: resolve(libSrc, 'manifest.json'),
+        };
+        assert.equal(existsSync(Paths.themes), true);
+        assert.equal(existsSync(Paths.dotLibrary), true);
+        assert.equal(existsSync(Paths.ExampleDbg), true);
+        assert.equal(existsSync(Paths.ExampleDbgMap), true);
+        assert.equal(existsSync(Paths.Example), true);
+        assert.equal(existsSync(Paths.ExampleMap), true);
+        assert.equal(existsSync(Paths.ExampleRendererDbg), true);
+        assert.equal(existsSync(Paths.ExampleRendererDbgMap), true);
+        assert.equal(existsSync(Paths.ExampleRenderer), true);
+        assert.equal(existsSync(Paths.ExampleRendererMap), true);
+        assert.equal(existsSync(Paths.libraryDbg), true);
+        assert.equal(existsSync(Paths.libraryDbgMap), true);
+        assert.equal(existsSync(Paths.libraryPreload), true);
+        assert.equal(existsSync(Paths.libraryPreloadMap), true);
+        assert.equal(existsSync(Paths.library), true);
+        assert.equal(existsSync(Paths.libraryMap), true);
+        assert.equal(existsSync(Paths.manifest), true);
+        assert.equal(readdirSync(libSrc).length, 23);
+    });
+
+    it('should output TS assets when flag is raised', (ctx: SuiteContext) => {
+        const ui5 = {
+            yaml: resolve(
+                './test/__assets__/com.github.dfenerski.library/ui5.withTSFiles.yaml',
+            ),
+        };
+        spawnSync(
+            `ui5 build --config "${ui5.yaml}" --dest "${resolve(
+                `${ctx.tmpDir}/dist`,
+            )}"`,
+            {
+                stdio: 'inherit',
+                shell: true,
+                cwd: resolve('./test/__assets__/com.github.dfenerski.library'),
+            },
+        );
+        const libSrc = resolve(
+            ctx.tmpDir!,
+            'dist',
+            'resources',
+            'com',
+            'github',
+            'dfenerski',
+            'library',
+        );
+        const Paths = {
+            indexDTS: resolve(ctx.tmpDir!, 'dist', 'index.d.ts'),
+            themes: resolve(libSrc, 'themes'),
+            dotLibrary: resolve(libSrc, '.library'),
+            libraryPreload: resolve(libSrc, 'library-preload.js'),
+            libraryDTS: resolve(libSrc, 'library.d.ts'),
+            libraryTS: resolve(libSrc, 'library.ts'),
+            manifest: resolve(libSrc, 'manifest.json'),
+            ExampleDTS: resolve(libSrc, 'Example.d.ts'),
+            ExampleGenDTS: resolve(libSrc, 'Example.gen.d.ts'),
+            ExampleTS: resolve(libSrc, 'Example.ts'),
+            ExampleRendererDTS: resolve(libSrc, 'ExampleRenderer.d.ts'),
+            ExampleRendererTS: resolve(libSrc, 'ExampleRenderer.ts'),
+        };
+        assert.equal(existsSync(Paths.indexDTS), true);
+        assert.equal(existsSync(Paths.themes), true);
+        assert.equal(existsSync(Paths.dotLibrary), true);
+        assert.equal(existsSync(Paths.libraryPreload), true);
+        assert.equal(existsSync(Paths.libraryDTS), true);
+        assert.equal(existsSync(Paths.libraryTS), true);
+        assert.equal(existsSync(Paths.manifest), true);
+        assert.equal(existsSync(Paths.ExampleDTS), true);
+        assert.equal(existsSync(Paths.ExampleGenDTS), true);
+        assert.equal(existsSync(Paths.ExampleTS), true);
+        assert.equal(existsSync(Paths.ExampleRendererDTS), true);
+        assert.equal(existsSync(Paths.ExampleRendererTS), true);
+        assert.equal(readdirSync(libSrc).length, 14);
+    });
+
+    it('should omit arbitrary dirs based on array input', (ctx: SuiteContext) => {
+        const ui5 = {
+            yaml: resolve(
+                './test/__assets__/com.github.dfenerski.library/ui5.withSomeDirs.yaml',
+            ),
+        };
+        spawnSync(
+            `ui5 build --config "${ui5.yaml}" --dest "${resolve(
+                `${ctx.tmpDir}/dist`,
+            )}"`,
+            {
+                stdio: 'inherit',
+                shell: true,
+                cwd: resolve('./test/__assets__/com.github.dfenerski.library'),
+            },
+        );
+        const libSrc = resolve(
+            ctx.tmpDir!,
+            'dist',
+            'resources',
+            'com',
+            'github',
+            'dfenerski',
+            'library',
+        );
+        const Paths = {
+            themes: resolve(libSrc, 'themes'),
+        };
+        assert.equal(existsSync(Paths.themes), false);
+        assert.equal(readdirSync(libSrc).length, 22);
+    });
+});
