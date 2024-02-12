@@ -1,6 +1,7 @@
 test
 .vscode
 .editorconfig
+.prettierrc
 .gitignore
 .package-lock.json
 ```
