@@ -32,7 +32,25 @@ npm install ui5-task-no-debug-files --save-dev
 builder:
     customTasks:
         - name: ui5-task-no-debug-files
-          afterTask: generateVersionInfo
+          afterTask: generateComponentPreload
+```
+
+In case of self contained build, use following configuration:
+
+```yaml
+builder:
+    customTasks:
+        - name: ui5-task-no-debug-files
+          afterTask: generateStandaloneAppBundle
+```
+
+In case of library, use following configuration:
+
+```yaml
+builder:
+    customTasks:
+        - name: ui5-task-no-debug-files
+          afterTask: generateLibraryPreload
 ```
 
 ## How it works
