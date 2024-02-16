@@ -18,7 +18,7 @@ builder:
       configuration:
         omitDbgFiles: false
         omitSourceMapFiles: false
-        omitNonBundledJSXMLFiles: false
+        omitNonBundled: false
         omitDirs: ['controller', 'model', 'properties']
 ---
 specVersion: '3.0'

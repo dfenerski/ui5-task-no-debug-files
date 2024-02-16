@@ -441,7 +441,7 @@ describe('lib', () => {
         assert.equal(existsSync(Paths.dotLibrary), true);
         assert.equal(existsSync(Paths.libraryPreload), true);
         assert.equal(existsSync(Paths.manifest), true);
-        assert.equal(readdirSync(libSrc).length, 30);
+        assert.equal(readdirSync(libSrc).length, 31);
     });
 
     it('should output both dbg & normal assets when both flags are raised', (ctx: SuiteContext) => {
@@ -491,7 +491,7 @@ describe('lib', () => {
         assert.equal(existsSync(Paths.libraryPreload), true);
         assert.equal(existsSync(Paths.library), true);
         assert.equal(existsSync(Paths.manifest), true);
-        assert.equal(readdirSync(libSrc).length, 13);
+        assert.equal(readdirSync(libSrc).length, 14);
     });
 
     it('should output dbg, sourceMap & normal assets when flags are raised', (ctx: SuiteContext) => {
@@ -558,7 +558,7 @@ describe('lib', () => {
         assert.equal(existsSync(Paths.library), true);
         assert.equal(existsSync(Paths.libraryMap), true);
         assert.equal(existsSync(Paths.manifest), true);
-        assert.equal(readdirSync(libSrc).length, 23);
+        assert.equal(readdirSync(libSrc).length, 24);
     });
 
     it('should output TS assets when flag is raised', (ctx: SuiteContext) => {
@@ -644,7 +644,49 @@ describe('lib', () => {
             themes: resolve(libSrc, 'themes'),
         };
         assert.equal(existsSync(Paths.themes), false);
-        assert.equal(readdirSync(libSrc).length, 22);
+        assert.equal(readdirSync(libSrc).length, 23);
+    });
+
+    it('should respect preserveNonBundled patterns', (ctx: SuiteContext) => {
+        const ui5 = {
+            yaml: resolve(
+                './test/__assets__/com.github.dfenerski.library/ui5.preserveNonBundled.yaml',
+            ),
+        };
+        spawnSync(
+            `ui5 build --config "${ui5.yaml}" --dest "${resolve(
+                `${ctx.tmpDir}/dist`,
+            )}"`,
+            {
+                stdio: 'inherit',
+                shell: true,
+                cwd: resolve('./test/__assets__/com.github.dfenerski.library'),
+            },
+        );
+        const libSrc = resolve(
+            ctx.tmpDir!,
+            'dist',
+            'resources',
+            'com',
+            'github',
+            'dfenerski',
+            'library',
+        );
+        const Paths = {
+            themes: resolve(libSrc, 'themes'),
+            scriptsCustom: resolve(libSrc, 'scripts-custom'),
+            fiddle: resolve(libSrc, 'scripts-custom', 'dontDeleteMe.js'),
+            dotLibrary: resolve(libSrc, '.library'),
+            libraryPreload: resolve(libSrc, 'library-preload.js'),
+            manifest: resolve(libSrc, 'manifest.json'),
+        };
+        assert.equal(existsSync(Paths.themes), true);
+        assert.equal(existsSync(Paths.scriptsCustom), true);
+        assert.equal(existsSync(Paths.fiddle), true);
+        assert.equal(existsSync(Paths.dotLibrary), true);
+        assert.equal(existsSync(Paths.libraryPreload), true);
+        assert.equal(existsSync(Paths.manifest), true);
+        assert.equal(readdirSync(libSrc).length, 8);
     });
 });
 

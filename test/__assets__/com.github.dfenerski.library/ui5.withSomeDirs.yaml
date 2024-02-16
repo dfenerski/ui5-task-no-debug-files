@@ -20,7 +20,7 @@ builder:
       configuration:
         omitDbgFiles: false
         omitSourceMapFiles: false
-        omitNonBundledJSXMLFiles: false
+        omitNonBundled: false
         omitDirs: ['themes']
 ---
 specVersion: '3.0'

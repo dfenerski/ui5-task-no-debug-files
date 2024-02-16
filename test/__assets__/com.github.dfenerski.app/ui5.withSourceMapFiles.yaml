@@ -18,7 +18,7 @@ builder:
       configuration:
         omitDbgFiles: false
         omitSourceMapFiles: false
-        omitNonBundledJSXMLFiles: false
+        omitNonBundled: false
 ---
 specVersion: '3.0'
 kind: extension
