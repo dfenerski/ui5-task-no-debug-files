@@ -1,6 +1,6 @@
 {
     "name": "ui5-task-no-debug-files",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "Task for the UI5 tooling to omit debug & map files from the final build result.",
     "scripts": {
         "test": "tsx ./test/index.test.ts"
